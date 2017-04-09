@@ -10,5 +10,5 @@ Note: /u/twoforjoy and /u/diceroll123 are not associated with me or this script
 <br>
 
 **FoodClub Series:**
-* [AUTO Highlight Winners](https://github.com/friendly-trenchcoat/Reddit-FoodClub-AUTOHighlight-Winners)
+* [Auto-Highlight Winners](https://github.com/friendly-trenchcoat/Reddit-FoodClub-AUTOHighlight-Winners)
 * [Bet Buttons](https://github.com/friendly-trenchcoat/Reddit-FoodClub-BetButtons)
