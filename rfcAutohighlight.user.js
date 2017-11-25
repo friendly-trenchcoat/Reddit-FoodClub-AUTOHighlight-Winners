@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Reddit - Food Club AUTO-Highlight Winners
 // @namespace      https://github.com/friendly-trenchcoat
-// @version        1.0
+// @version        1.1
 // @description    Winners are automatically found via daqtools. Each bet table will have winning bets highlighted, and total winnings added up.
 // @author         friendly-trenchcoat
 // @include        https://www.reddit.com/r/neopets/comments/*/food_club_bets_*
@@ -17,6 +17,7 @@ function highlight(winners){
         winAmt = 0;
         $(v).children().each(function(k,v) { // for each row
             if ($(v).children().length >= 7){      // (if it's actually a bet table)
+                console.log($(v).children().length);
                 for (var i=1; i<6; i++){           // for each column
                     cell = $(v).children().eq(i);
                     if (!(winners.includes(cell.text())) && cell.text() !== '') { // if the cell contains a pirate that's not a winner
@@ -27,9 +28,12 @@ function highlight(winners){
                 winAmt += parseInt(cell.text());
                 $(v).css("background-color", "#ffc");
             }
+            else winAmt = -1;
         });
-        console.log(winAmt);
-        $(v).parent().parent().prepend('<h1 class="winAmt">'+winAmt+':'+$(v).children().length+'</h1>');
+        if (winAmt >= 0) {
+            console.log(winAmt);
+            $(v).parent().parent().prepend('<h1 class="winAmt">'+winAmt+':'+$(v).children().length+'</h1>');
+        }
     });
 }
 
