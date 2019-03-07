@@ -1,9 +1,9 @@
-# Reddit-FoodClub-AUTOHighlight-Winners
-No input necessary! 
+# Reddit - FoodClub AutoHighlight Winners
 
-Each bet table will AUTOMATICALLY have winning bets highlighted, and total winnings added up and displayed at top of comment. Now works for *every day!* (piggybacks off of diceroll123's stuff and daqtools)
+Each bet table will automatically have winning bets highlighted, and total winnings added up and displayed at top of comment. (piggybacks off of diceroll123's stuff and neofoodclub.fr)
 
 The winners will be displayed in the main post if they have been decided. 
+**NEW** Table of each user's winnings now also displayed.
 
 ![Screenshot](http://i.imgur.com/4qJIOSf.png "Screenshot")
 Note: /u/twoforjoy and /u/diceroll123 are not associated with me or this script

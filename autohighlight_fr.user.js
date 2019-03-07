@@ -1,15 +1,12 @@
 // ==UserScript==
 // @name           Reddit - Food Club AUTO-Highlight Winners 
 // @namespace      https://github.com/friendly-trenchcoat
-// @version        0.1
-// @description    Winners are automatically found via NeoFoodClub.fr   Each bet table will have winning bets highlighted, and total winnings added up.
+// @version        1.0
+// @description    Winners are automatically found via NeoFoodClub.fr   Each bet table will have winning bets highlighted, and total winnings added up. Winnings listed at top now too.
 // @author         friendly-trenchcoat
 // @include        https://www.reddit.com/r/neopets/comments/*/food_club_bets_*
-// @include        http://neofoodclub.fr/
 // @require	       http://code.jquery.com/jquery-latest.min.js
 // @grant          GM_xmlhttpRequest
-// @grant          GM_getValue
-// @grant          GM_setValue
 // @connect        neofoodclub.fr
 // ==/UserScript==
 
@@ -32,10 +29,9 @@
         var winnings = [];
         $("tbody").each(function(k,v) { // for each table
             winAmt = 0;
-            $(v).children().each(function(k,v) { // for each row
-                if ($(v).children().length >= 7){      // (if it's actually a bet table)
-                    //console.log($(v).children().length);
-                    for (var i=1; i<6; i++){           // for each column
+            $(v).children().each(function(k,v) {    // for each row
+                if ($(v).children().length >= 7){   // (if it's actually a bet table)
+                    for (var i=1; i<6; i++){        // for each column
                         cell = $(v).children().eq(i);
                         if (!(winners.includes(cell.text())) && cell.text() !== '') { // if the cell contains a pirate that's not a winner
                             return true; // skip to next row
@@ -63,57 +59,32 @@
         return html;
     }
 
-    if (document.URL.indexOf("reddit") != -1) {
-        var round = $("th[align='center']").first().text();
-        console.log(round);
-        var url = "http://neofoodclub.fr/#round="+round;
-        var post = $(".md").eq(1); // main post, which we'll add the winners onto at the bottom
-        post.append('<a href="'+url+'"><h1>Winners</h1></a>');
+    var round = $("th[align='center']").first().text();
+    var $post = $(".md").eq(1); // post body; we'll add winners/winnings to the end
+    $post.append('<h1>Winners</h1>');
 
-        if (round == GM_getValue("round")){
-            //do stuff
-            winners = GM_getValue("winners");
-            var winnings = highlight(winners);
-            post.append('<p>'+winners+'</p>');
-            post.append('<p><h1>Winnings</h1>'+winningsHTML(winnings)+'</p>');
-            $('#winnings tr:nth-child(even)').css('background-color','#eee');
+    GM_xmlhttpRequest ({
+        method: 'GET',
+        url: `http://neofoodclub.fr/rounds/${round}.json`,
+        onload: function (value) {
+            var response = JSON.parse(value.responseText);
+            if (response['winners'][0] != 0) { // if the round is over
+                var pirates = ['Dan', 'Sproggie', 'Orvinn', 'Lucky', 'Edmund', 'Peg Leg', 'Bonnie Pip', 'Puffo', 'Stuff', 'Squire', 'Crossblades', 'Stripey', 'Ned', 'Fairfax', 'Gooblah', 'Franchisco', 'Federismo', 'Blackbeard', 'Buck', 'Tailhook'];
+                var winners = '';
+                for (var i=0; i<5; i++) 
+                    winners += `${pirates[response['pirates'][i][response['winners'][i]-1]-1]} | `; // 100% readable
+                winners = winners.slice(0, -3);
+
+                var winnings = highlight(winners);
+                $post.append('<p>'+winners+'</p>');
+                $post.append('<p><h1>Winnings</h1>'+winningsHTML(winnings)+'</p>');
+                $('#winnings tr:nth-child(even)').css('background-color','#eee');
+            }
+            else $post.append("<p>Not yet declared.</p>");
         }
-        else console.log('not');
-    }
-    else {
-        var winners = "";
-        $(".won").each(function(k,v) {
-            //console.log($(v).children().first().text());
-            if (k<5) winners += $(v).children().first().text();
-            if (k<4) winners += " | ";
-        });
-        console.log(winners);
-        var round = $('textarea:contains("#round=")').text().match(/#round=([0-9,\,]*)&/)[1];
-        GM_setValue("round", round);
-        GM_setValue("winners", winners);
-    }
+    });
+
 })();
-
-/*
-GM_xmlhttpRequest ({
-    method: 'GET',
-    url: url,
-    onload: function (value) {
-        var source = value.responseText;
-        if ( $(source).find(".winner").length > 0 ) {   // if the round is over
-            var winners = "";
-            $(source).find(".winner").each(function(k,v) {
-                winners += $(v).text();
-                if (k<4) winners += " | ";
-            });
-            highlight(winners);
-            post.append('<p>'+winners+'</p>');
-        }
-        else post.append("<p>Not yet declared.</p>");  // if the round is not over
-    }
-});
-*/
-
 
 
 

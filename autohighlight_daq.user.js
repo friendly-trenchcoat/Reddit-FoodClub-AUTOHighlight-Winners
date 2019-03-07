@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name           Reddit - Food Club AUTO-Highlight Winners
+// @name           Reddit - Food Club AUTO-Highlight Winners - DEAD
 // @namespace      https://github.com/friendly-trenchcoat
-// @version        1.1
+// @version        1.2
 // @description    Winners are automatically found via daqtools. Each bet table will have winning bets highlighted, and total winnings added up.
 // @author         friendly-trenchcoat
 // @include        https://www.reddit.com/r/neopets/comments/*/food_club_bets_*
